@@ -11,11 +11,19 @@ export class WeatherService {
   constructor(private http: HttpClient) { }
   apiKey: string = 'JYLM2SE2XH26WBHJKJUTX78XQ';
   url: string = 'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/';
-  unitGroup: string = 'us';
+  unitGroup: string = 'metric';
   period: string = 'today';
   weatherData: WeatherData = <WeatherData>{};
 
    getCurrentWeatherData(cityName: string): Observable<WeatherData>{
+    return this.http.get<WeatherData>(this.url+cityName+"/"+this.period,{
+        params: new HttpParams()
+        .set('unitGroup', this.unitGroup)
+        .set('key',this.apiKey)
+      });
+  }
+
+  getData(cityName: string): Observable<WeatherData>{
     return this.http.get<WeatherData>(this.url+cityName+"/"+this.period,{
         params: new HttpParams()
         .set('unitGroup', this.unitGroup)

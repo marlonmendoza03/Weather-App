@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { WeatherService } from './services/weather.service';
 import { Day, WeatherData } from './models/weather.model';
-import { firstValueFrom } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -9,12 +9,17 @@ import { firstValueFrom } from 'rxjs';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
+
+  constructor(private weatherService: WeatherService, private changeDetector: ChangeDetectorRef){}
+
   weatherData: WeatherData = <WeatherData>{};
   cityName: string = 'Manila';
   finishedLoading: boolean = false;
   day: Day[] = [];
+  imgUrl = '../assets/loading.gif';
+ 
 
-  constructor(private weatherService: WeatherService){}
+  getData$ = this.weatherService.getData(this.cityName);
 
   ngOnInit(): void {
     this.getWeatherForecast('Manila');
@@ -32,6 +37,11 @@ export class AppComponent implements OnInit{
       response => {
         this.weatherData = response;
         console.log(this.weatherData);
+        if(this.weatherData.days[0]?.temp > 25){
+            this.imgUrl = '../assets/hotWeatherIcon.png';
+        }else{
+          this.imgUrl = '../assets/coldWeatherIcon.png';
+        }
       }
     )
   }

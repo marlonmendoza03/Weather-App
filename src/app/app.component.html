@@ -3,13 +3,12 @@
     <input type="text" placeholder="Location..." name="city" [(ngModel)]="cityName">
   </form>
 </div>
-<div class="container" *ngIf="weatherData">
+<div class="container" *ngFor="let data of weatherData.days">
   <div class="upper-data">
-    <img src="../assets/hotWeatherIcon.png" *ngIf="weatherData.days[0].temp > 75">
-    <img src="../assets/coldWeatherIcon.png" *ngIf="weatherData.days[0].temp <= 75">
+    <img [src]="imgUrl">
     <div class="weather-data">
       <div class="location">{{ weatherData.address }}</div>
-      <div class="temperature"> {{ weatherData.days[0].temp  | number: '1.0-0' }}°C</div>
+      <div class="temperature"> {{ data.temp  | number: '1.0-0' || 0}}°C</div>
     </div>
   </div>
   <div class="lower-data">
@@ -23,7 +22,7 @@
           <span>min</span>
         </div>
         <div class="info-block-value">
-          {{ weatherData.days.at(0)?.tempmin }}°C
+          {{ data.tempmin }}°C
         </div>
       </div>
 
@@ -33,7 +32,7 @@
           <span>max</span>
         </div>
         <div class="info-block-value">
-          {{ weatherData.days.at(0)?.tempmax }}°C
+          {{ data.tempmax }}°C
         </div>
       </div>
 
@@ -43,7 +42,7 @@
           <span>humidity</span>
         </div>
         <div class="info-block-value">
-          {{ weatherData.days.at(0)?.humidity }}%
+          {{ data.humidity }}%
         </div>
       </div>
 
@@ -53,13 +52,11 @@
           <span>wind</span>
         </div>
         <div class="info-block-value">
-          {{ weatherData.days.at(0)?.windspeed }} km/h
+          {{ data.windspeed }} km/h
         </div>
       </div>
     </div>
   </div>
 </div>
-<script *ngIf="cityNotFound">
-  alert("City Not Found");
-</script>
+<ng-http-loader></ng-http-loader>
 <router-outlet></router-outlet>
